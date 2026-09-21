@@ -1,1 +1,1 @@
-# ai_status_in_korea
+2026. 9. 21. ai 교육
