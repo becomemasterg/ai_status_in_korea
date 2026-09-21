@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>대한민국 AI G3 정책관 | 전 세대 맞춤형 AI 포털</title>
+  
+  <!-- Pretendard Font -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Canvas Confetti for Quiz -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              200: '#bae0fd',
+              300: '#7cc7fb',
+              400: '#38aaf7',
+              500: '#0e8ee9',
+              600: '#0270c7',
+              700: '#0359a1',
+              800: '#074c85',
+              900: '#0c406e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      overflow-x: hidden;
+      transition: font-size 0.2s ease;
+    }
+    /* Senior Mode: Increased readability and larger fonts */
+    body.senior-mode {
+      font-size: 19px;
+      line-height: 1.75;
+    }
+    body.senior-mode h1 { font-size: 2.75rem !important; }
+    body.senior-mode h2 { font-size: 2.2rem !important; }
+    body.senior-mode h3 { font-size: 1.6rem !important; }
+    body.senior-mode p, body.senior-mode li { font-size: 1.15rem !important; }
+
+    .light-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 4px 20px -2px rgba(99, 102, 241, 0.05);
+      transition: all 0.25s ease;
+    }
+    .light-card:hover {
+      box-shadow: 0 16px 32px -4px rgba(37, 99, 235, 0.12);
+      border-color: rgba(147, 197, 253, 0.8);
+      transform: translateY(-3px);
+    }
+    .hero-glow {
+      background: radial-gradient(circle at 50% 30%, rgba(191, 219, 254, 0.65) 0%, rgba(243, 232, 255, 0.4) 45%, transparent 75%);
+    }
+    .modal-backdrop {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(8px);
+    }
+  </style>
+</head>
+<body class="selection:bg-blue-500 selection:text-white relative">
+
+  <!-- Background decorative light shapes -->
+  <div class="fixed top-0 left-10 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="fixed top-1/4 right-0 w-[32rem] h-[32rem] bg-purple-200/35 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="fixed bottom-20 left-1/3 w-80 h-80 bg-cyan-200/30 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+  <!-- INITIAL AGE SELECTION MODAL -->
+  <div id="age-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop transition-opacity duration-300">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative transform transition-all">
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-500 text-white flex items-center justify-center text-2xl shadow-lg shadow-blue-500/30">
+          🇰🇷
+        </div>
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 mb-2">
+          대한민국 AI 정책 맞춤관
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">
+          연령대를 선택해 주세요! ✨
+        </h2>
+        <p class="text-slate-600 text-sm mt-2">
+          선택하신 연령대에 꼭 필요한 정책과 혜택을 맞춤형으로 안내해 드립니다. (상단에서 언제든 변경 가능)
+        </p>
+      </div>
+
+      <!-- 3 Age Selection Cards -->
+      <div class="space-y-3.5 mb-6">
+        <!-- Option 1: 20대 이하 -->
+        <button onclick="confirmAgeSelection('under20')" class="w-full text-left p-4 sm:p-5 rounded-2xl border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 transition group flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-blue-100 group-hover:bg-blue-600 group-hover:text-white text-blue-600 flex items-center justify-center text-2xl shrink-0 transition">
+            🚀
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-base text-slate-900 group-hover:text-blue-600 transition">20대 이하 (청소년·청년)</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold">미래 세대</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">방학 무료 AI 캠프, 10대 크리에이터 워터마크 규칙, 30초 상식 퀴즈</p>
+          </div>
+        </button>
+
+        <!-- Option 2: 20~50대 -->
+        <button onclick="confirmAgeSelection('20to50')" class="w-full text-left p-4 sm:p-5 rounded-2xl border-2 border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/50 transition group flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-100 group-hover:bg-indigo-600 group-hover:text-white text-indigo-600 flex items-center justify-center text-2xl shrink-0 transition">
+            💼
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-base text-slate-900 group-hover:text-indigo-600 transition">20~50대 (직장인·기업인·학부모)</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-bold">경제 주역</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">산업 AX 혁신, 인공지능기본법 '선 허용' 혜택, 국가 GPU 바우처, 자녀 AI 안전망</p>
+          </div>
+        </button>
+
+        <!-- Option 3: 60대 이상 -->
+        <button onclick="confirmAgeSelection('over60')" class="w-full text-left p-4 sm:p-5 rounded-2xl border-2 border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition group flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 group-hover:bg-emerald-600 group-hover:text-white text-emerald-600 flex items-center justify-center text-2xl shrink-0 transition">
+            🌸
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-base text-slate-900 group-hover:text-emerald-600 transition">60대 이상 (시니어·어르신)</span>
+              <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">큰 글씨 모드</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-1">딥페이크·피싱 사기 안심 예방, 전국 무료 스마트폰 배움터, 건강·복지 AI</p>
+          </div>
+        </button>
+      </div>
+
+      <div class="text-center">
+        <button onclick="confirmAgeSelection('under20')" class="text-xs text-slate-400 hover:text-slate-600 font-medium underline">
+          기본 전체 둘러보기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSISTENT TOP AGE-SWITCHER BAR -->
+  <div class="bg-slate-900 text-white py-2 px-4 sticky top-0 z-40 text-xs sm:text-sm">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-blue-400 flex items-center gap-1">
+          <i data-lucide="sliders" class="w-4 h-4"></i> 연령별 맞춤 모드:
+        </span>
+        <span id="current-age-badge" class="font-semibold text-slate-200 bg-slate-800 px-2.5 py-0.5 rounded-full border border-slate-700">
+          20대 이하 (청소년·청년)
+        </span>
+      </div>
+
+      <!-- Switcher Buttons -->
+      <div class="flex items-center gap-1.5">
+        <button onclick="setAgeGroup('under20')" id="tab-under20" class="age-tab px-3 py-1 rounded-lg font-bold text-xs transition bg-blue-600 text-white">
+          🚀 20대 이하
+        </button>
+        <button onclick="setAgeGroup('20to50')" id="tab-20to50" class="age-tab px-3 py-1 rounded-lg font-bold text-xs transition bg-slate-800 text-slate-300 hover:bg-slate-700">
+          💼 20~50대
+        </button>
+        <button onclick="setAgeGroup('over60')" id="tab-over60" class="age-tab px-3 py-1 rounded-lg font-bold text-xs transition bg-slate-800 text-slate-300 hover:bg-slate-700">
+          🌸 60대 이상
+        </button>
+        <button onclick="openAgeModal()" class="ml-1 text-slate-400 hover:text-white p-1" title="연령 선택창 다시 열기">
+          <i data-lucide="help-circle" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header / Navigation Bar -->
+  <header class="sticky top-9 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-18 py-3">
+        
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-400 p-[2px] shadow-md shadow-blue-500/20 group-hover:rotate-6 transition-transform">
+            <div class="w-full h-full bg-white rounded-[14px] flex items-center justify-center">
+              <span id="logo-emoji" class="text-xl">🚀</span>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-black tracking-wide text-blue-600 uppercase bg-blue-50 px-2 py-0.5 rounded-full">KOREA AI 3.0</span>
+              <span id="header-age-tag" class="text-xs font-bold text-purple-600">미래 청소년관</span>
+            </div>
+            <div class="text-lg font-black tracking-tight text-slate-900 flex items-center gap-1">
+              대한민국 <span class="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">AI 정책관</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Menu -->
+        <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <a href="#vision" class="px-3.5 py-2 text-sm font-semibold text-slate-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl transition">AI G3 비전</a>
+          <a href="#pillars" class="px-3.5 py-2 text-sm font-semibold text-slate-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl transition">4대 핵심 정책</a>
+          <a href="#act" class="px-3.5 py-2 text-sm font-semibold text-slate-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl transition">AI 기본법·워터마크</a>
+          <a href="#custom-section" class="px-3.5 py-2 text-sm font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl transition flex items-center gap-1.5">
+            <span id="nav-custom-title">✨ 10대 맞춤가이드</span>
+          </a>
+          <a href="#timeline" class="px-3.5 py-2 text-sm font-semibold text-slate-600 hover:text-blue-600 hover:bg-blue-50/80 rounded-xl transition">로드맵</a>
+        </nav>
+
+        <!-- CTA & Mobile Toggle -->
+        <div class="flex items-center gap-3">
+          <a href="#custom-section" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20 transition">
+            <span id="cta-button-text">맞춤 혜택 보기</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+          <button id="mobile-menu-btn" class="md:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100" aria-label="메뉴 열기">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-6 space-y-2 border-t border-slate-200 bg-white/95 backdrop-blur-xl">
+      <a href="#vision" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold text-slate-700 hover:bg-blue-50">AI G3 비전</a>
+      <a href="#pillars" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold text-slate-700 hover:bg-blue-50">4대 핵심 정책</a>
+      <a href="#act" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold text-slate-700 hover:bg-blue-50">AI 기본법·워터마크</a>
+      <a href="#custom-section" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold text-blue-700 bg-blue-50">맞춤 가이드</a>
+      <a href="#timeline" class="block px-3.5 py-2.5 rounded-xl text-base font-semibold text-slate-700 hover:bg-blue-50">추진 로드맵</a>
+    </div>
+  </header>
+
+  <!-- DYNAMIC HERO SECTION -->
+  <section class="relative pt-12 pb-20 lg:pt-16 lg:pb-24 overflow-hidden hero-glow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      
+      <!-- Badges -->
+      <div id="hero-badge-container" class="inline-flex flex-wrap items-center justify-center gap-2 mb-6">
+        <!-- Dynamically injected via JS -->
+      </div>
+
+      <!-- Main Headline & Subtext -->
+      <div class="max-w-4xl mx-auto">
+        <h1 id="hero-title" class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-tight mb-6">
+          <!-- Dynamically injected via JS -->
+        </h1>
+        <p id="hero-desc" class="text-base sm:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed font-medium">
+          <!-- Dynamically injected via JS -->
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="#custom-section" id="hero-primary-cta" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-base shadow-lg shadow-blue-500/25 transition transform hover:-translate-y-0.5">
+            <span>맞춤 정보 자세히 보기</span>
+            <span>👇</span>
+          </a>
+          <a href="#pillars" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-base border border-slate-200 shadow-sm transition hover:shadow-md">
+            <span>대한민국 4대 핵심정책</span>
+            <i data-lucide="compass" class="w-4 h-4 text-blue-600"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4 Highlight Counter Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-16 max-w-5xl mx-auto">
+        
+        <div class="light-card rounded-2xl p-6 text-center bg-white/90">
+          <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-blue-100 flex items-center justify-center text-xl">
+            🏆
+          </div>
+          <div class="text-3xl sm:text-4xl font-black text-blue-600 mb-1">AI G3</div>
+          <div class="text-xs sm:text-sm font-bold text-slate-800">글로벌 3대 강국 도약</div>
+          <div class="text-xs text-slate-500 mt-1">세계 최고 수준 경쟁력 확보</div>
+        </div>
+
+        <div class="light-card rounded-2xl p-6 text-center bg-white/90">
+          <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-cyan-100 flex items-center justify-center text-xl">
+            ⚡
+          </div>
+          <div class="text-3xl sm:text-4xl font-black text-cyan-600 mb-1">15,000+</div>
+          <div class="text-xs sm:text-sm font-bold text-slate-800">초고성능 GPU 보급</div>
+          <div class="text-xs text-slate-500 mt-1">2028년 국가 AI 컴퓨팅 센터</div>
+        </div>
+
+        <div class="light-card rounded-2xl p-6 text-center bg-white/90">
+          <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-purple-100 flex items-center justify-center text-xl">
+            📜
+          </div>
+          <div class="text-3xl sm:text-4xl font-black text-purple-600 mb-1">세계 2번째</div>
+          <div class="text-xs sm:text-sm font-bold text-slate-800">인공지능기본법 제정</div>
+          <div class="text-xs text-slate-500 mt-1">혁신과 안전의 완벽한 조화</div>
+        </div>
+
+        <div class="light-card rounded-2xl p-6 text-center bg-white/90">
+          <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-emerald-100 flex items-center justify-center text-xl">
+            🛡️
+          </div>
+          <div class="text-3xl sm:text-4xl font-black text-emerald-600 mb-1">세계 6번째</div>
+          <div class="text-xs sm:text-sm font-bold text-slate-800">AI 안전연구소(AISI)</div>
+          <div class="text-xs text-slate-500 mt-1">판교 R&D센터 딥페이크 감시</div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DYNAMIC AGE-SPECIFIC SPECIAL SECTION -->
+  <section id="custom-section" class="py-20 bg-white border-y border-slate-200 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Container populated dynamically based on active age group -->
+      <div id="custom-section-content">
+        <!-- Injected via JS -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4대 핵심 정책 기둥 (Common Core Pillars) -->
+  <section id="pillars" class="py-20 bg-slate-50 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
+            Core 4 Pillars
+          </span>
+          <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-3">
+            대한민국 AI 정책의 4대 핵심 기둥 🏛️
+          </h2>
+        </div>
+        <p class="text-slate-600 max-w-md text-sm sm:text-base">
+          최상위 컨트롤타워부터 튼튼한 법률, 초고속 인프라, 글로벌 안전 기구까지 완벽하게 갖추었습니다.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Pillar 1 -->
+        <div class="light-card rounded-3xl p-8 bg-white border border-slate-200/80 hover:border-blue-300 transition">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">
+              컨트롤타워
+            </span>
+            <span class="text-2xl font-black text-blue-200">01</span>
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+            대통령 직속 국가인공지능위원회 🎯
+          </h3>
+          <p class="text-slate-600 text-sm leading-relaxed mb-6">
+            민간 최고의 AI 전문가들과 각 정부 부처 장관들이 '원팀'으로 뭉쳤습니다. 부처 간 칸막이를 부수고 신속한 규제 혁신과 65조 원 규모의 민간 AI 투자를 이끌어냅니다.
+          </p>
+          <div class="bg-blue-50/60 rounded-2xl p-4 text-xs text-slate-700 space-y-2">
+            <div>💡 <strong>대통령 주재:</strong> 국가 최고 의사결정 기구로 공식 출범</div>
+            <div>💡 <strong>4대 플래그십:</strong> GPU 인프라, 전 산업 AX(AI 대전환), 안전연구소 가동 총괄</div>
+          </div>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="light-card rounded-3xl p-8 bg-white border border-slate-200/80 hover:border-purple-300 transition">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700">
+              법과 규칙
+            </span>
+            <span class="text-2xl font-black text-purple-200">02</span>
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+            인공지능기본법 제정 및 시행 📜
+          </h3>
+          <p class="text-slate-600 text-sm leading-relaxed mb-6">
+            유럽연합(EU)에 이어 세계 2번째로 포괄적 AI 기본법을 완성했습니다. 기업의 연구개발은 파격 지원하고, 딥페이크 오남용과 고영향 AI 위험은 법으로 단단히 막습니다.
+          </p>
+          <div class="bg-purple-50/60 rounded-2xl p-4 text-xs text-slate-700 space-y-2">
+            <div>💡 <strong>선 허용 사후 규제:</strong> 초기 창의적 실험을 방해하지 않는 네거티브 규제</div>
+            <div>💡 <strong>워터마크 의무:</strong> 생성형 AI 결과물에 인공지능 창작 표시 의무화</div>
+          </div>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="light-card rounded-3xl p-8 bg-white border border-slate-200/80 hover:border-emerald-300 transition">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
+              초고속 인프라
+            </span>
+            <span class="text-2xl font-black text-emerald-200">03</span>
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+            국가 AI 컴퓨팅 센터 (KOACC) ⚡
+          </h3>
+          <p class="text-slate-600 text-sm leading-relaxed mb-6">
+            비싸서 쓰기 힘든 첨단 GPU(H200/B200)를 정부와 민간이 2028년까지 <strong>1만 5,000장</strong> 이상 확보! 스타트업과 청년 연구자들에게 저렴하게 빌려줍니다.
+          </p>
+          <div class="bg-emerald-50/60 rounded-2xl p-4 text-xs text-slate-700 space-y-2">
+            <div>💡 <strong>친환경 데이터파크:</strong> 전남 해남 솔라시도 태양광 재생에너지 기반 착공</div>
+            <div>💡 <strong>K-클라우드:</strong> 외산 GPU뿐 아니라 자랑스러운 국산 NPU 반도체 탑재</div>
+          </div>
+        </div>
+
+        <!-- Pillar 4 -->
+        <div class="light-card rounded-3xl p-8 bg-white border border-slate-200/80 hover:border-cyan-300 transition">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-cyan-100 text-cyan-700">
+              글로벌 안전 거버넌스
+            </span>
+            <span class="text-2xl font-black text-cyan-200">04</span>
+          </div>
+          <h3 class="text-2xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+            AI 안전연구소 (AISI) 개소 🛡️
+          </h3>
+          <p class="text-slate-600 text-sm leading-relaxed mb-6">
+            판교 글로벌 R&D 센터에 세계 6번째로 설립된 대한민국 AI 안전 전담기관! 초거대 AI의 통제력 상실과 악용을 모니터링하고 세계 안전 표준을 함께 만듭니다.
+          </p>
+          <div class="bg-cyan-50/60 rounded-2xl p-4 text-xs text-slate-700 space-y-2">
+            <div>💡 <strong>레드팀 운영:</strong> 화이트해커처럼 최신 AI 모델의 보안 취약점을 사전 검증</div>
+            <div>💡 <strong>국제 공조:</strong> 미국·영국·일본 AI 안전연구소와 실시간 위협 정보 공유</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 인공지능기본법 & 워터마크 안내 -->
+  <section id="act" class="py-20 bg-white border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 mb-2">
+          Law & Trust
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-black text-slate-900">
+          안심하고 활용하는 『인공지능기본법』 핵심 규칙
+        </h2>
+        <p class="text-slate-600 mt-2 text-sm sm:text-base">
+          기술 혁신은 자유롭게 열어두고, 국민의 안전과 권익은 꼼꼼하게 지킵니다.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="light-card rounded-2xl p-6 bg-slate-50/60">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 font-bold flex items-center justify-center mb-4">1</div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">선(先) 허용, 후(後) 규제</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            새로운 아이디어와 비즈니스를 시도할 때 사전 규제에 막히지 않도록 먼저 기술 개발을 보장하고, 부작용이 발생할 경우 사후 시정하는 합리적 원칙입니다.
+          </p>
+        </div>
+
+        <div class="light-card rounded-2xl p-6 bg-slate-50/60">
+          <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 font-bold flex items-center justify-center mb-4">2</div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">생성형 AI 워터마크 의무</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            딥페이크 가짜 뉴스와 이미지 위조를 막기 위해, AI가 생성한 콘텐츠에는 "인공지능 제작" 표시(워터마크)를 의무적으로 붙여야 합니다.
+          </p>
+        </div>
+
+        <div class="light-card rounded-2xl p-6 bg-slate-50/60">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center mb-4">3</div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">고영향 AI 안전성 관리</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            국민의 생명, 의료, 채용 등 삶에 중대한 영향을 미치는 AI 시스템은 사전에 철저한 신뢰성과 안전성 평가를 거치도록 법제화했습니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 타임라인 (Timeline) -->
+  <section id="timeline" class="py-20 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-14">
+        <span class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
+          Roadmap & Timeline
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-3">
+          대한민국 AI 정책의 발자취와 미래 🚀
+        </h2>
+      </div>
+
+      <div class="relative border-l-2 border-blue-300 ml-4 md:ml-32 space-y-10 py-2">
+        
+        <!-- 2024.05 -->
+        <div class="relative pl-8 group">
+          <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-blue-600 border-4 border-white shadow"></div>
+          <div class="md:absolute md:-left-32 md:top-1 text-xs font-bold text-blue-600 mb-1 md:mb-0">
+            2024년 5월
+          </div>
+          <div class="light-card p-5 rounded-2xl bg-white border border-slate-200/80">
+            <div class="text-sm font-bold text-slate-900 mb-1">AI 서울 정상회의 개최 & '서울 선언' 채택</div>
+            <p class="text-xs text-slate-600">
+              세계 정상들과 안전성·혁신성·포용성의 3대 가치를 공동 선언하며 글로벌 AI 리더십 발휘.
+            </p>
+          </div>
+        </div>
+
+        <!-- 2024.09 -->
+        <div class="relative pl-8 group">
+          <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-indigo-600 border-4 border-white shadow"></div>
+          <div class="md:absolute md:-left-32 md:top-1 text-xs font-bold text-indigo-600 mb-1 md:mb-0">
+            2024년 9월
+          </div>
+          <div class="light-card p-5 rounded-2xl bg-white border border-slate-200/80">
+            <div class="text-sm font-bold text-slate-900 mb-1">대통령 직속 '국가인공지능위원회' 출범</div>
+            <p class="text-xs text-slate-600">
+              민간과 정부가 원팀으로 뭉쳐 'AI 3대 강국(G3)' 도약 국가 전략 선포.
+            </p>
+          </div>
+        </div>
+
+        <!-- 2024.11 -->
+        <div class="relative pl-8 group">
+          <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-cyan-500 border-4 border-white shadow"></div>
+          <div class="md:absolute md:-left-32 md:top-1 text-xs font-bold text-cyan-600 mb-1 md:mb-0">
+            2024년 11월
+          </div>
+          <div class="light-card p-5 rounded-2xl bg-white border border-slate-200/80">
+            <div class="text-sm font-bold text-slate-900 mb-1">판교 'AI 안전연구소(AISI)' 공식 개소</div>
+            <p class="text-xs text-slate-600">
+              세계 6번째로 AI 위험 평가 및 딥페이크 대응 전담 연구소 출범!
+            </p>
+          </div>
+        </div>
+
+        <!-- 2024.12 -->
+        <div class="relative pl-8 group">
+          <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-purple-600 border-4 border-white shadow"></div>
+          <div class="md:absolute md:-left-32 md:top-1 text-xs font-bold text-purple-600 mb-1 md:mb-0">
+            2024년 12월
+          </div>
+          <div class="light-card p-5 rounded-2xl bg-white border border-slate-200/80">
+            <div class="text-sm font-bold text-slate-900 mb-1">『인공지능기본법』 국회 본회의 압도적 가결</div>
+            <p class="text-xs text-slate-600">
+              찬성 260표로 통과! EU에 이어 세계 2번째로 포괄적 AI 기본법 제정 완료.
+            </p>
+          </div>
+        </div>
+
+        <!-- 2026 ~ 2028 -->
+        <div class="relative pl-8 group">
+          <div class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-amber-500 border-4 border-white shadow animate-pulse"></div>
+          <div class="md:absolute md:-left-32 md:top-1 text-xs font-bold text-amber-600 mb-1 md:mb-0">
+            2026년~2028년
+          </div>
+          <div class="light-card p-5 rounded-2xl bg-amber-50/60 border border-amber-200">
+            <div class="text-sm font-bold text-amber-900 mb-1">인공지능기본법 전면 시행 & 국가 AI 컴퓨팅 센터 1.5만 장 완성</div>
+            <p class="text-xs text-slate-700">
+              전남 해남 솔라시도 데이터파크 완공 및 산·학·연 GPU 보급, 전 국민 AI 일상화 실현!
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 py-10 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-lg">🇰🇷</span>
+        <div>
+          <div class="font-bold text-slate-800 text-sm">대한민국 AI G3 정책 포털 (전 세대 맞춤관)</div>
+          <div>대통령 직속 국가인공지능위원회 · 과학기술정보통신부 정책 기반</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 text-slate-600">
+        <span class="font-semibold text-blue-600">버전 v1.2.0</span>
+        <span>•</span>
+        <button onclick="openAgeModal()" class="hover:underline text-slate-700">연령대 재설정</button>
+        <span>•</span>
+        <span>인공지능기본법</span>
+        <span>•</span>
+        <span>국가 AI 컴퓨팅 센터 (KOACC)</span>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 pt-4 border-t border-slate-100 text-center text-slate-400">
+      © Republic of Korea AI Policy Portal. Tailored for Every Generation.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Mobile Menu Toggle
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
+
+    // Age Group Dynamic Configuration
+    const ageConfig = {
+      under20: {
+        badgeText: '20대 이하 (청소년·청년)',
+        headerTag: '미래 청소년관',
+        logoEmoji: '🚀',
+        navCustomTitle: '✨ 10대 맞춤가이드',
+        ctaButtonText: '청소년 꿀팁 보기',
+        heroBadges: [
+          { emoji: '🌟', text: '글로벌 3대 AI 강국(AI G3) 도전', bg: 'bg-blue-100 text-blue-800' },
+          { emoji: '🛡️', text: '딥페이크 차단 & 워터마크 규칙', bg: 'bg-purple-100 text-purple-800' },
+          { emoji: '🎒', text: '방학 중 무료 SW·AI 캠프', bg: 'bg-emerald-100 text-emerald-800' }
+        ],
+        heroTitle: '우리의 미래를 바꾸는 AI,<br /><span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 bg-clip-text text-transparent">대한민국이 여러분의 꿈을 응원합니다!</span>',
+        heroDesc: '세계가 주목하는 글로벌 3대 AI 강국(AI G3)으로의 도약! 초고속 GPU 인프라부터 청소년을 위한 무료 배움터, 30초 상식 퀴즈까지 알기 쉽게 만나보세요.',
+        renderCustomSection: renderUnder20Section
+      },
+      '20to50': {
+        badgeText: '20~50대 (직장인·기업인·학부모)',
+        headerTag: '비즈니스 & 커리어관',
+        logoEmoji: '💼',
+        navCustomTitle: '💼 산업 AX & 커리어',
+        ctaButtonText: '직장인·기업 혜택',
+        heroBadges: [
+          { emoji: '📈', text: '전 산업 AI 대전환(AX) 가속', bg: 'bg-indigo-100 text-indigo-800' },
+          { emoji: '📜', text: '인공지능기본법 선(先) 허용 원칙', bg: 'bg-blue-100 text-blue-800' },
+          { emoji: '⚡', text: '국가 GPU 바우처 지원', bg: 'bg-cyan-100 text-cyan-800' }
+        ],
+        heroTitle: '비즈니스와 일상을 바꾸는 AI 대전환,<br /><span class="bg-gradient-to-r from-indigo-600 via-blue-600 to-teal-500 bg-clip-text text-transparent">대한민국이 경제 혁신을 이끕니다!</span>',
+        heroDesc: '기업 R&D 세액 공제, 국가 AI 컴퓨팅 센터를 통한 저비용 고성능 GPU 할당, 그리고 인공지능기본법의 규제 샌드박스로 직무 생산성과 비즈니스 성장을 지원합니다.',
+        renderCustomSection: render20to50Section
+      },
+      over60: {
+        badgeText: '60대 이상 (시니어·어르신)',
+        headerTag: '시니어 안심 복지관',
+        logoEmoji: '🌸',
+        navCustomTitle: '🌸 어르신 안심 가이드',
+        ctaButtonText: '안심 혜택 알아보기',
+        heroBadges: [
+          { emoji: '🛡️', text: '딥페이크·피싱 사기 원천 차단', bg: 'bg-rose-100 text-rose-800' },
+          { emoji: '📱', text: '전국 무료 스마트폰·AI 배움터', bg: 'bg-emerald-100 text-emerald-800' },
+          { emoji: '🩺', text: '독거어르신 AI 건강 돌봄망', bg: 'bg-amber-100 text-amber-800' }
+        ],
+        heroTitle: '어르신의 일상을 안전하고 편리하게!<br /><span class="bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 bg-clip-text text-transparent">대한민국이 든든한 AI 안전망을 만듭니다.</span>',
+        heroDesc: '얼굴이나 목소리를 조작하는 사기 범죄 예방법부터, 집 근처 무료 스마트폰 교육, AI 건강 돌봄 서비스까지 큰 글씨로 알기 쉽게 안내해 드립니다.',
+        renderCustomSection: renderOver60Section
+      }
+    };
+
+    let activeAgeGroup = 'under20';
+
+    // Open & Close Modal
+    function openAgeModal() {
+      document.getElementById('age-modal').classList.remove('hidden');
+    }
+    function closeAgeModal() {
+      document.getElementById('age-modal').classList.add('hidden');
+    }
+
+    function confirmAgeSelection(group) {
+      localStorage.setItem('korea_ai_age_group', group);
+      setAgeGroup(group);
+      closeAgeModal();
+    }
+
+    // Main Function to Set Age Group
+    function setAgeGroup(group) {
+      activeAgeGroup = group;
+      const config = ageConfig[group];
+      if (!config) return;
+
+      // Update Body Senior Mode (enlarges text for 60+)
+      if (group === 'over60') {
+        document.body.classList.add('senior-mode');
+      } else {
+        document.body.classList.remove('senior-mode');
+      }
+
+      // Update Switcher Tab Styles
+      document.querySelectorAll('.age-tab').forEach(tab => {
+        tab.classList.remove('bg-blue-600', 'text-white');
+        tab.classList.add('bg-slate-800', 'text-slate-300');
+      });
+      const activeTab = document.getElementById(`tab-${group}`);
+      if (activeTab) {
+        activeTab.classList.remove('bg-slate-800', 'text-slate-300');
+        activeTab.classList.add('bg-blue-600', 'text-white');
+      }
+
+      // Update Header Badges & Text
+      document.getElementById('current-age-badge').textContent = config.badgeText;
+      document.getElementById('header-age-tag').textContent = config.headerTag;
+      document.getElementById('logo-emoji').textContent = config.logoEmoji;
+      document.getElementById('nav-custom-title').textContent = config.navCustomTitle;
+      document.getElementById('cta-button-text').textContent = config.ctaButtonText;
+
+      // Update Hero Badges
+      const badgeContainer = document.getElementById('hero-badge-container');
+      badgeContainer.innerHTML = config.heroBadges.map(b => `
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold ${b.bg}">
+          <span>${b.emoji}</span> ${b.text}
+        </span>
+      `).join('');
+
+      // Update Hero Title & Desc
+      document.getElementById('hero-title').innerHTML = config.heroTitle;
+      document.getElementById('hero-desc').textContent = config.heroDesc;
+
+      // Render Dynamic Custom Section
+      config.renderCustomSection();
+
+      lucide.createIcons();
+    }
+
+    // SECTION BUILDER 1: 20대 이하 (청소년·청년)
+    function renderUnder20Section() {
+      const container = document.getElementById('custom-section-content');
+      container.innerHTML = `
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 mb-2">
+            Youth Special Guide
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+            10대와 청소년을 위한 특별 가이드 & 30초 퀴즈 🎒
+          </h2>
+          <p class="text-slate-600 mt-2 text-sm sm:text-base">
+            공부할 때, 창작할 때, 진로를 고민할 때 꼭 알아야 할 AI 정책과 꿀팁입니다.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div class="light-card rounded-2xl p-6 bg-white border border-purple-100">
+            <div class="text-3xl mb-3">🎨</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">AI 창작물 워터마크 규칙</h4>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-3">
+              생성형 AI로 그림·영상을 만들었을 때 "AI 제작" 표기를 남기는 것은 필수 매너이자 기본법 규정입니다.
+            </p>
+            <div class="p-3 bg-purple-50 rounded-xl text-xs text-purple-900 font-semibold">
+              🔒 타인 얼굴을 합성하는 딥페이크는 중대한 범죄입니다!
+            </div>
+          </div>
+
+          <div class="light-card rounded-2xl p-6 bg-white border border-blue-100">
+            <div class="text-3xl mb-3">💻</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">무료 디지털 새싹 캠프</h4>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-3">
+              방학마다 교육부와 과기정통부가 주관하는 소프트웨어·AI 새싹 캠프에 전국 초·중·고생 무료 참여 가능!
+            </p>
+            <div class="p-3 bg-blue-50 rounded-xl text-xs text-blue-900 font-semibold">
+              🚀 파이썬 기초부터 생성형 AI 활용법까지 실습 제공
+            </div>
+          </div>
+
+          <div class="light-card rounded-2xl p-6 bg-white border border-emerald-100">
+            <div class="text-3xl mb-3">🚀</div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">예비 AI 개발자 지원</h4>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-3">
+              청소년 AI 챌린지, 대학·연구소 연계 고성능 GPU 연산 자원 할당 등 미래의 AI 인재를 전폭 육성합니다.
+            </p>
+            <div class="p-3 bg-emerald-50 rounded-xl text-xs text-emerald-900 font-semibold">
+              ⚡ 국가 AI 컴퓨팅 센터의 연구 지원 혜택 연결
+            </div>
+          </div>
+        </div>
+
+        <!-- 30초 퀴즈 삽입 -->
+        <div class="light-card rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-md bg-gradient-to-br from-white via-blue-50/30 to-white max-w-3xl mx-auto">
+          <div class="flex items-center justify-between text-xs font-bold text-blue-600 mb-3">
+            <span>🎯 30초 AI 상식 퀴즈</span>
+            <span class="px-2.5 py-0.5 bg-blue-100 rounded-full">3문항</span>
+          </div>
+          <div id="quiz-box">
+            <h3 class="text-lg font-bold text-slate-900 mb-4">Q. 내가 AI로 만든 영상에 '워터마크'를 표시해야 할까요?</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button onclick="handleUnder20Quiz(true)" class="p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50 text-left font-bold text-slate-800">
+                ⭕ 네, 인공지능기본법상 필수입니다!
+              </button>
+              <button onclick="handleUnder20Quiz(false)" class="p-4 rounded-xl border border-slate-200 hover:border-red-300 hover:bg-red-50 text-left font-bold text-slate-800">
+                ❌ 아니요, 표시 안 해도 상관없습니다.
+              </button>
+            </div>
+            <div id="under20-quiz-fb" class="hidden mt-4 p-4 rounded-xl text-xs sm:text-sm"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    // SECTION BUILDER 2: 20~50대 (직장인·기업인·학부모)
+    function render20to50Section() {
+      const container = document.getElementById('custom-section-content');
+      container.innerHTML = `
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 mb-2">
+            Business & Productivity Guide
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+            2050 직장인·창업가·학부모를 위한 정책 혜택 💼
+          </h2>
+          <p class="text-slate-600 mt-2 text-sm sm:text-base">
+            산업 AI 대전환(AX)부터 국가 GPU 바우처, 자녀 교육 지원까지 실무에 유용한 핵심 정보입니다.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div class="light-card rounded-2xl p-6 bg-white border border-indigo-100">
+            <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl mb-4">
+              🏢
+            </div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">기업 AI 바우처 & 인프라 공급</h4>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-3">
+              스타트업과 중소기업에 시세 대비 최대 70% 저렴하게 국가 AI 컴퓨팅 센터의 첨단 GPU(H200/B200) 및 국산 NPU 자원을 할당합니다.
+            </p>
+            <div class="p-3 bg-indigo-50 rounded-xl text-xs text-indigo-900 font-semibold">
+              📈 정보통신산업진흥원(NIPA) 바우처 지원 사업 연계
+            </div>
+          </div>
+
+          <div class="light-card rounded-2xl p-6 bg-white border border-blue-100">
+            <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mb-4">
+              ⚖️
+            </div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">인공지능기본법 '선 허용' 원칙</h4>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-3">
+              신규 AI 비즈니스 출시 시 불필요한 사전 규제를 걷어내고, 충분한 계도기간과 규제 샌드박스를 통해 사업 안정성을 보장합니다.
+            </p>
+            <div class="p-3 bg-blue-50 rounded-xl text-xs text-blue-900 font-semibold">
+              🔍 고영향 AI 적합성 사전 컨설팅 지원 제공
+            </div>
+          </div>
+
+          <div class="light-card rounded-2xl p-6 bg-white border border-emerald-100">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl mb-4">
+              👨‍👩‍👧‍👦
+            </div>
+            <h4 class="text-lg font-bold text-slate-900 mb-2">학부모를 위한 자녀 안전망</h4>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed mb-3">
+              학교 현장 AI 윤리 가이드라인을 보급하고, 청소년 딥페이크 피해 방지를 위한 긴급 신고·심리 상담 연계망을 가동합니다.
+            </p>
+            <div class="p-3 bg-emerald-50 rounded-xl text-xs text-emerald-900 font-semibold">
+              🛡️ 피해 발생 시 112·118 즉각 보호 프로세스 가동
+            </div>
+          </div>
+        </div>
+
+        <!-- 2050 Interactive Checker -->
+        <div class="light-card rounded-3xl p-6 sm:p-8 border border-slate-200/90 bg-gradient-to-r from-indigo-50/50 via-white to-blue-50/50 max-w-3xl mx-auto">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-2xl">📋</span>
+            <div>
+              <h4 class="text-base sm:text-lg font-bold text-slate-900">우리 회사·팀에 맞는 AI 정책 혜택 체크</h4>
+              <p class="text-xs text-slate-500">관심 있는 항목을 클릭하면 지원 사업 정보를 보여드립니다.</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+            <button onclick="show2050Detail('gpu')" class="p-3.5 rounded-xl border border-slate-200 bg-white hover:border-indigo-500 font-bold text-xs sm:text-sm text-slate-800 text-center">
+              ⚡ 첨단 GPU 지원 바우처
+            </button>
+            <button onclick="show2050Detail('tax')" class="p-3.5 rounded-xl border border-slate-200 bg-white hover:border-indigo-500 font-bold text-xs sm:text-sm text-slate-800 text-center">
+              💰 AI R&D 국가 세액 공제
+            </button>
+            <button onclick="show2050Detail('safety')" class="p-3.5 rounded-xl border border-slate-200 bg-white hover:border-indigo-500 font-bold text-xs sm:text-sm text-slate-800 text-center">
+              🛡️ AI 안전성 인증 컨설팅
+            </button>
+          </div>
+          <div id="biz-detail-box" class="mt-4 p-4 rounded-xl bg-white border border-slate-200 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            위 버튼을 선택하시면 실무 세부 지원 내용을 확인하실 수 있습니다.
+          </div>
+        </div>
+      `;
+    }
+
+    // SECTION BUILDER 3: 60대 이상 (시니어·어르신)
+    function renderOver60Section() {
+      const container = document.getElementById('custom-section-content');
+      container.innerHTML = `
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <span class="inline-block px-4 py-1.5 rounded-full text-sm font-bold bg-emerald-100 text-emerald-800 mb-2">
+            🌸 시니어 안심 생활 가이드 (큰 글씨 모드 적용 중)
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-black text-slate-900">
+            어르신을 위한 알기 쉬운 AI 정책 & 피싱 예방
+          </h2>
+          <p class="text-slate-600 mt-2 text-base sm:text-lg">
+            어려운 기술 용어 없이, 실생활에 꼭 필요한 안전 수칙과 무료 교육을 안내해 드립니다.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div class="light-card rounded-2xl p-6 bg-white border-2 border-emerald-200">
+            <div class="text-4xl mb-3">📱</div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">전국 무료 '디지털 배움터'</h3>
+            <p class="text-slate-700 text-sm leading-relaxed mb-4">
+              집 근처 주민센터나 복지관에서 강사님이 1:1로 스마트폰 사용법과 AI 말벗 서비스를 친절하게 가르쳐 드립니다.
+            </p>
+            <div class="p-3 bg-emerald-50 rounded-xl text-sm text-emerald-900 font-bold">
+              📞 수강 신청: 국번 없이 1800-0096 (무료 상담)
+            </div>
+          </div>
+
+          <div class="light-card rounded-2xl p-6 bg-white border-2 border-rose-200">
+            <div class="text-4xl mb-3">🚨</div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">목소리 합성(피싱) 사기 주의!</h3>
+            <p class="text-slate-700 text-sm leading-relaxed mb-4">
+              자녀나 손주의 목소리를 AI로 흉내 내며 돈을 요구하는 사기가 있습니다. 의심 전화가 오면 반드시 끊고 본인에게 직접 확인하세요.
+            </p>
+            <div class="p-3 bg-rose-50 rounded-xl text-sm text-rose-900 font-bold">
+              🛡️ 피해 신고: 경찰청 112 또는 금융감독원 1332
+            </div>
+          </div>
+
+          <div class="light-card rounded-2xl p-6 bg-white border-2 border-blue-200">
+            <div class="text-4xl mb-3">🩺</div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">AI 건강·안부 돌봄 서비스</h3>
+            <p class="text-slate-700 text-sm leading-relaxed mb-4">
+              지자체와 복지관에서 AI가 정기적으로 전화를 드려 식사와 건강 상태를 챙기고, 위급 상황 시 복지사를 즉시 연결해 드립니다.
+            </p>
+            <div class="p-3 bg-blue-50 rounded-xl text-sm text-blue-900 font-bold">
+              ❤️ 관할 행정복지센터(주민센터)에 신청 가능
+            </div>
+          </div>
+        </div>
+
+        <!-- 어르신 안심 3계명 -->
+        <div class="light-card rounded-3xl p-6 sm:p-8 border-2 border-emerald-300 bg-emerald-50/40 max-w-3xl mx-auto">
+          <h3 class="text-xl font-black text-emerald-900 mb-4 flex items-center gap-2">
+            <span>🛡️</span> 어르신을 위한 AI 안심 3계명
+          </h3>
+          <ul class="space-y-3 text-base text-slate-800">
+            <li class="flex items-start gap-2.5">
+              <span class="font-bold text-emerald-700 shrink-0">①</span>
+              <span><strong>돈을 요구하는 가족 목소리 전화:</strong> 일단 전화를 끊고, 기존에 저장된 번호로 다시 확인하세요.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="font-bold text-emerald-700 shrink-0">②</span>
+              <span><strong>영상이나 사진의 'AI 표시' 확인:</strong> 인공지능이 만든 가짜 영상에는 워터마크 표시가 있으니 꼼꼼히 살피세요.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <span class="font-bold text-emerald-700 shrink-0">③</span>
+              <span><strong>무료 배움터 적극 참여:</strong> 디지털 기술을 두려워 마시고 집 근처 무료 교육을 이용해 보세요.</span>
+            </li>
+          </ul>
+        </div>
+      `;
+    }
+
+    // Quiz Handler for under20
+    function handleUnder20Quiz(isCorrect) {
+      const fb = document.getElementById('under20-quiz-fb');
+      fb.classList.remove('hidden');
+      if (isCorrect) {
+        fb.className = 'mt-4 p-4 rounded-xl text-xs sm:text-sm bg-emerald-100 text-emerald-900 font-medium border border-emerald-300';
+        fb.innerHTML = '🎉 <strong>정답입니다!</strong> 인공지능기본법에 따라 생성형 AI로 제작된 콘텐츠는 투명한 워터마크 표시가 법적 의무입니다.';
+        if (window.confetti) {
+          confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+        }
+      } else {
+        fb.className = 'mt-4 p-4 rounded-xl text-xs sm:text-sm bg-rose-100 text-rose-900 font-medium border border-rose-300';
+        fb.innerHTML = '💡 <strong>아쉬워요!</strong> 생성형 AI 결과물은 다른 사람에게 혼란을 주지 않도록 워터마크 표시가 필수입니다.';
+      }
+    }
+
+    // Detail Handler for 20to50
+    function show2050Detail(type) {
+      const box = document.getElementById('biz-detail-box');
+      if (type === 'gpu') {
+        box.innerHTML = '⚡ <strong>국가 AI 컴퓨팅 센터 바우처:</strong> 엔비디아 최신 가속기(H200/B200) 및 리벨리온/사피온 등 국산 NPU 자원을 AI 스타트업과 대학 연구진에 최대 70% 할인 공급합니다. (NIPA 포털을 통해 공고 확인)';
+      } else if (type === 'tax') {
+        box.innerHTML = '💰 <strong>AI 국가전략기술 세액공제:</strong> AI 모델 개발 및 고성능 연산 설비 투자 비용에 대해 중소기업 최대 40~50%, 대·중견기업 30~40% 세액공제 혜택을 부여합니다.';
+      } else if (type === 'safety') {
+        box.innerHTML = '🛡️ <strong>AI 안전성 인증 컨설팅:</strong> AI 안전연구소(AISI)와 TTA를 통해 금융·의료·인사 등 고영향 AI 서비스의 신뢰성 검증 가이드라인 및 사전 컨설팅을 무료 지원합니다.';
+      }
+    }
+
+    // On Load Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedGroup = localStorage.getItem('korea_ai_age_group');
+      if (savedGroup && ageConfig[savedGroup]) {
+        closeAgeModal();
+        setAgeGroup(savedGroup);
+      } else {
+        openAgeModal();
+        setAgeGroup('under20');
+      }
+    });
+  </script>
+</body>
+</html>
